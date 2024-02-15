@@ -4,13 +4,13 @@ mpc.version = '2';
 
 %%-----  Power Flow Data  -----%%
 %% system MVA base
-// scalar value specifying the system MVA base used for converting power into per unit quantities
+%% scalar value specifying the system MVA base used for converting power into per unit quantities
 mpc.baseMVA = 100;
 %% bus data
-// bus index, type (1=PQ/load,2=PV/generator,3=ref/slack,4=isolated),
-// power demand, reactive power
-// demand, shunt conductance, shunt susceptance, area, voltage magnitude,
-// voltage angle, base voltage, loss zone, max voltage, min voltage
+%% bus index, type (1=PQ/load,2=PV/generator,3=ref/slack,4=isolated),
+%% power demand, reactive power
+%% demand, shunt conductance, shunt susceptance, area, voltage magnitude,
+%% voltage angle, base voltage, loss zone, max voltage, min voltage
 %    bus_i    type    Pd    Qd    Gs    Bs    area    Vm    Va    baseKV    zone    Vmax    Vmin
 mpc.bus = [
 	1	1	56.6305477	16.8298619	0.0	0.0	0	1.0	-1.9398059299999997	115.0	0	1.06	0.94
@@ -8886,15 +8886,15 @@ mpc.bus = [
 ];
 
 %% generator data
-// bus, real power output, reactive power output, maax reactive power output,
-// min reactive power output, voltage magnitude setpoint, total MVA base of
-// machine, machine status (> 0 in serevice, <= 0 out of service), max real
-// power output, min real power output, lower real power output of PQ capability
-// curve, upper real power output of PQ capability curve, min reactive power
-// at PC1, max reactive power at PC1, min reactive power at PC2, max reactive
-// power at PC2, ramp rate for load following, ramp rate for 10 min, ramp rate
-// for 30 min, ramp rate for reactive power (2 sec timescale),
-// area participation factor
+%% bus, real power output, reactive power output, max reactive power output,
+%% min reactive power output, voltage magnitude setpoint, total MVA base of
+%% machine, machine status (> 0 in serevice, <= 0 out of service), max real
+%% power output, min real power output, lower real power output of PQ capability
+%% curve, upper real power output of PQ capability curve, min reactive power
+%% at PC1, max reactive power at PC1, min reactive power at PC2, max reactive
+%% power at PC2, ramp rate for load following, ramp rate for 10 min, ramp rate
+%% for 30 min, ramp rate for reactive power (2 sec timescale),
+%% area participation factor
 %    bus    Pg    Qg    Qmax    Qmin    Vg    mBase    status    Pmax    Pmin    Pc1    Pc2    Qc1min    Qc1max    Qc2min    Qc2max    ramp_agc    ramp_10    ramp_30    ramp_q    apf
 mpc.gen = [
 	745	4.0333628	0.0	18.7771429	-14.670714300000002	1.0	0.0	1	12.1	0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
@@ -12792,11 +12792,11 @@ mpc.gen = [
 ];
 
 %% branch data
-// from bus, to bus, resistance, reactance, total line charging susceptance,
-// branch flow limit long term rating, short term rating, emergency rating,
-// transformer off nominal turns ratio, transformer phase shift angle, initial
-// branch status (1 in service, 0 out of service), minimum angle diff,
-// max angle diff
+%% from bus, to bus, resistance, reactance, total line charging susceptance,
+%% branch flow limit long term rating, short term rating, emergency rating,
+%% transformer off nominal turns ratio, transformer phase shift angle, initial
+%% branch status (1 in service, 0 out of service), minimum angle diff,
+%% max angle diff
 %    f_bus    t_bus    r    x    b    rateA    rateB    rateC    ratio    angle    status    angmin    angmax
 mpc.branch = [
 	1	2410	4.77325417e-5	0.000218973035	2.70512591e-5	175.0	0.0	0.0	0	0	1	-60.0001403060998	60.0001403060998
@@ -23626,12 +23626,12 @@ mpc.branch = [
 
 %%-----  OPF Data  -----%%
 %% cost data
-// cost model (1=piecewise linear, 2=polynomial), startup cost, shutdown cost,
-// N = n+1 where n-segment piecewise linear cost function OR n-th order
-// polynomial cost function, cost parameters (see below)
-//
-// model 2 cost = n coefficients of nth order polynomial cost function,
-// starting with highest order
+%% cost model (1=piecewise linear, 2=polynomial), startup cost, shutdown cost,
+%% N = n+1 where n-segment piecewise linear cost function OR n-th order
+%% polynomial cost function, cost parameters (see below)
+%%
+%% model 2 cost = n coefficients of nth order polynomial cost function,
+%% starting with highest order
 %    1    startup    shutdown    n    x1    y1    ...    xn    yn
 %    2    startup    shutdown    n    c(n-1)    ...    c0
 mpc.gencost = [
