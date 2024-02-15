@@ -4,3 +4,6 @@
 
 # Do not track solutions
 **_solution.json
+
+# Large files
+data/
