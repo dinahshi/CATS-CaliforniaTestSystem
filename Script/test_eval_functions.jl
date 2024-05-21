@@ -24,6 +24,7 @@ end
 function update_rgen!(k,NetworkData,gen_data,SolarGeneration,WindGeneration,PMaxOG,SolarCap,WindCap)
     for j in 1:size(gen_data)[1]
         if occursin("solar",lowercase(gen_data[j,"FuelType"]))
+            # total solar generation at timepoint k / baseMVA * generator capacity / total solar capacity
             NetworkData["gen"][string(j)]["pmax"] = SolarGeneration[k]/NetworkData["baseMVA"] * PMaxOG[j]/SolarCap
         elseif occursin("wind",lowercase(gen_data[j,"FuelType"]))
             NetworkData["gen"][string(j)]["pmax"] = WindGeneration[k]/NetworkData["baseMVA"] * PMaxOG[j]/WindCap

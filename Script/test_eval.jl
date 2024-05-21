@@ -8,7 +8,7 @@ using Gurobi, Ipopt
 # User input
 save_to_JSON = true
 save_summary = false
-N = 8760
+N = 24
 # run for N hours (scenarios)
 
 # Specify solver
@@ -19,12 +19,12 @@ N = 8760
 solver = Ipopt.Optimizer #JuMP.optimizer_with_attributes(() -> Ipopt.Optimizer(), "print_level" => 1)
 
 include("test_eval_functions.jl")
-load_scenarios = CSV.read("../data/Load_Agg_Post_Assignment_v3_latest.csv",header = false, DataFrame)
+load_scenarios = CSV.read("data/Load_Agg_Post_Assignment_v3_latest.csv",header = false, DataFrame)
 load_scenarios = load_scenarios[:,1:N]
 
-NetworkData = PowerModels.parse_file("../MATPOWER/CaliforniaTestSystem.m")
+NetworkData = PowerModels.parse_file("MATPOWER/CaliforniaTestSystem-lcost.m")
 
-gen_data = CSV.read("../GIS/CATS_gens.csv",DataFrame)
+gen_data = CSV.read("GIS/CATS_gens.csv",DataFrame)
 
 PMaxOG = [NetworkData["gen"][string(i)]["pmax"] for i in 1:size(gen_data)[1]]
 println(sum(PMaxOG))
@@ -32,12 +32,13 @@ println(sum(PMaxOG))
 SolarGenIndex = [g for g in 1:size(gen_data)[1] if occursin("solar", lowercase(gen_data.FuelType[g]))]
 WindGenIndex= [g for g in 1:size(gen_data)[1] if occursin("wind", lowercase(gen_data.FuelType[g]))]
 
+# computes the max power from solar across all solar generators
 SolarCap = sum(g["pmax"] for (i,g) in NetworkData["gen"] if g["index"] in SolarGenIndex)
 WindCap = sum(g["pmax"] for (i,g) in NetworkData["gen"] if g["index"] in WindGenIndex)
 
 load_mapping = map_buses_to_loads(NetworkData)
 
-HourlyData2019 = CSV.read("../data/HourlyProduction2019.csv",DataFrame)
+HourlyData2019 = CSV.read("data/HourlyProduction2019.csv",DataFrame)
 SolarGeneration = HourlyData2019[1:N,"Solar"]
 WindGeneration = HourlyData2019[1:N,"Wind"]
 
@@ -46,7 +47,7 @@ results = []
 
 @time begin
     #Threads.@threads
-    for k = 8649:N
+    for k = 1:N
         #println("k = $k on thread $(Threads.threadid())")
         println(k)
         # Change renewable generators' pg for the current scenario
@@ -65,6 +66,12 @@ results = []
            export_JSON(solution, k, "solutions")
         end
         push!(results,  solution["termination_status"])
+
+        soln_gen = solution["solution"]["gen"]
+        soln_gen_df = DataFrame(gen_id = collect(keys(soln_gen)), qg = [d["qg"] for d in values(soln_gen)], pg = [d["pg"] for d in values(soln_gen)])
+        soln_gen_df.gen_id = parse.(Int, soln_gen_df.gen_id)
+        sort!(soln_gen_df, :gen_id)
+        CSV.write("solutions/solution_$(k)_gen.csv", soln_gen_df)
     end
 end
 
